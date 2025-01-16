@@ -3,126 +3,83 @@ package controlador;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-
-import modelo.Usuario;
-import modelo.Cliente;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import javax.swing.JOptionPane;
+import vista.Principal;
+import vista.Principal.enumAcciones;
 
 public class Controlador implements ActionListener {
 
-	private vista.VLogin vLogin;
 	private vista.Principal vistaPrincipal;
-
-	private ArrayList<Usuario> usuarios;
-	private Usuario usarioConectado;
-	private Cliente cliente;
+    private Socket cliente;
+    private ObjectOutputStream dos;
+    private ObjectInputStream dis;
+    private int id = 0;
 
 	/*
 	 * *** CONSTRUCTORES ***
 	 */
-	public Controlador(vista.Principal vistaPrincipal) {
-		this.vistaPrincipal = vistaPrincipal;
-		this.inicializarControlador();
+    public Controlador(vista.Principal vistaPrincipal) {
+        this.vistaPrincipal = vistaPrincipal;
+        this.inicializarControlador();
+    }
 
-		try {
-			conectarConServidor();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+    private void inicializarControlador() {
 
-	private void inicializarControlador() {
-		inicializarPaneles();
-		// PANEL Login
-		// btn Aceptar
-		this.vLogin.getBtnAceptar().addActionListener(this);
-		this.vLogin.getBtnAceptar().setActionCommand(enumAcciones.LOGIN.toString());
-	}
+        try {
+            cliente = new Socket("localhost", 4500);
+            dos = new ObjectOutputStream(cliente.getOutputStream());
+            dis = new ObjectInputStream(cliente.getInputStream());
 
-	private void inicializarPaneles() {
-		vLogin = this.vistaPrincipal.getvLogin();
-		
-	}
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        // VENTANA LOGIN
+        this.vistaPrincipal.getPanelLogin().getBtnLogin().addActionListener(this);
+        this.vistaPrincipal.getPanelLogin().getBtnLogin().setActionCommand(Principal.enumAcciones.LOGIN.toString());}
 
-	/*** Tratamiento de las acciones ***/
+
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		enumAcciones accion = enumAcciones.valueOf(e.getActionCommand());
+    public void actionPerformed(ActionEvent e) {
+        // TODO Auto-generated method stub
+        Principal.enumAcciones accion = Principal.enumAcciones.valueOf(e.getActionCommand());
 
-		switch (accion) {
-		case LOGIN:
-			login();
-			System.out.println();
-			break;
-		case REGISTRARSE:
-			vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_REGISTRO);
-			break;
-	
-		case DESCONECTAR:
-			System.exit(0);
-			break;
-		default:
-			break;
-		}
-	}
+        switch (accion) {
+        case LOGIN:
+            this.mConfirmarLogin(accion);
+            break;
+        case DESCONECTAR:
+            this.vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_LOGIN);
+            break;
+        default:
+            break;
+        }
+    }
 
-	
+	private void mConfirmarLogin(enumAcciones accion) {
+        // TODO Auto-generated method stub
 
-	private void login() {
-		String usuario = vLogin.getTextFieldUser().getText().toString();
-		String contrasenha = vLogin.getTextFieldPass().getText().toString();
-		boolean loginCorrecto = false;
+        try {
+            dos.writeObject(1);
+            dos.flush();
+            dos.writeObject(this.vistaPrincipal.getPanelLogin().getTextFieldUser().getText());
+            dos.flush();
+            dos.writeObject(new String(this.vistaPrincipal.getPanelLogin().getTextFieldPass().getPassword()));
+            dos.flush();
+            id = (int) dis.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
-		if (!usuario.isEmpty() && !contrasenha.isEmpty()) {
-			//Existe el usuario y concide la contraseña con la almaceanada hasheada
-			for (Usuario u : usuarios) {
-				if (u.getUser().equals(usuario) && u.getContrasenha().equals(generarHash(contrasenha))) {
-					loginCorrecto = true;
-					usarioConectado = u;
-					System.out.println("registrado");
-					break;
-				}
-			}
-		}
-
-		/*if (loginCorrecto) {
-			try {
-				cliente.usuarioCorrecto(vChat.getTextArea(), vChat.getTextField());
-			} catch (ClassNotFoundException | IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_CHAT);
-		} else {
-			vLogin.getLblError().setVisible(true);
-
-			vLogin.getLblError().setText("Credenciales incorrectas.");
-		}*/
-	}
-
-	private String generarHash(String texto) {
-		String resumenString = "";
-		try {
-			MessageDigest md = MessageDigest.getInstance("SHA");
-			byte dataBytes[] = texto.getBytes();
-			md.update(dataBytes);
-			byte resumen[] = md.digest();
-			resumenString = new String(resumen);
-		} catch (NoSuchAlgorithmException e) {
-			resumenString = "Error al generar el hash";
-			e.printStackTrace();
-		}
-		return resumenString;
-	}
-
-	private void conectarConServidor() throws ClassNotFoundException, IOException {
-		cliente = new Cliente();
-		usuarios = cliente.getUsuarios();
-	}
+        if (id != 0) {
+            System.out.println("Hola");
+            this.vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_MENU);
+        } else {
+            JOptionPane.showMessageDialog(null, "No existe ningun profesor con esas credenciales");
+        }
+    }
 }

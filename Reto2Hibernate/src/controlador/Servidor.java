@@ -1,4 +1,4 @@
-package modelo;
+package controlador;
 
 import java.io.*;
 import java.net.*;
@@ -6,10 +6,12 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
+import modelo.HiloServidor;
+import modelo.Usuario;
+
 public class Servidor {
 	private static final int PUERTO = 4500;
 	private ArrayList<Usuario> usuarios = new ArrayList<>();
-	;
 	private ArrayList<ObjectOutputStream> listaClientes;
 
 	public Servidor() {

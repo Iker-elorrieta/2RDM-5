@@ -3,7 +3,6 @@ package vista;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import controlador.enumAcciones;
 
 public class Principal extends JFrame {
 
@@ -12,20 +11,37 @@ public class Principal extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	// Acciones
-
-
+	private PanelLogin panelLogin;
 	private JPanel panelContenedor;
-	private VLogin vLogin;
 
 
+	public static enum enumAcciones {
+        CARGAR_PANEL_LOGIN, CARGAR_PANEL_MENU, LOGIN, DESCONECTAR, CARGAR_PANEL_HORARIO, CARGAR_PANEL_LISTA,VOLVER,TAREAS_PENDIENTES, CONFIRMAR_REUNION,RECHAZAR_REUNION,SELECCIONAR_PROFESOR
+
+    }
+	
+	
 
 
 	public Principal() {
 		mCrearPanelContenedor();
 		mCrearVLogin();
-
 	}
+	
+	public void mVisualizarPaneles(enumAcciones panel) {
+
+		panelLogin.setVisible(false);
+        switch (panel) {
+        case CARGAR_PANEL_LOGIN:
+        	panelLogin.setVisible(true);
+            break;
+       
+        default:
+            break;
+            }
+
+        
+    }
 
 	// *** Creaci�n de paneles ***
 
@@ -41,41 +57,33 @@ public class Principal extends JFrame {
 	}
 
 	private void mCrearVLogin() {
-		vLogin = new VLogin();
-		vLogin.setLocation(0, 11);
-		panelContenedor.add(vLogin);
-		panelContenedor.setBounds(vLogin.getBounds());
-		vLogin.setVisible(true);
+		panelLogin = new PanelLogin();
+		panelLogin.setLocation(0, 11);
+		panelContenedor.add(panelLogin);
+		panelContenedor.setBounds(panelLogin.getBounds());
+		panelLogin.setVisible(true);
 	}
 
 
 	// *** FIN creaci�n de paneles ***
 
-	public void mVisualizarPaneles(enumAcciones panel) {
-
-		vLogin.setVisible(false);
 	
 
+	public JPanel getPanelContenedor() {
+        return panelContenedor;
+    }
 
-		switch (panel) {
-		case CARGAR_PANEL_LOGIN:
-			vLogin.setVisible(true);
-			break;
-		
+    public void setPanelContenedor(JPanel panelContenedor) {
+        this.panelContenedor = panelContenedor;
+    }
 
-		default:
-			break;
+    public PanelLogin getPanelLogin() {
+        return panelLogin;
+    }
 
-		}
-	}
-
-	public VLogin getvLogin() {
-		return vLogin;
-	}
-
-	public void setvLogin(VLogin vLogin) {
-		this.vLogin = vLogin;
-	}
+    public void setPanelLogin(PanelLogin panelLogin) {
+        this.panelLogin = panelLogin;
+    }
 
 
 
