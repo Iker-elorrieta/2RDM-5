@@ -7,7 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 public class Servidor {
-	private static final int PUERTO = 5000;
+	private static final int PUERTO = 4500;
 	private ArrayList<Usuario> usuarios = new ArrayList<>();
 	;
 	private ArrayList<ObjectOutputStream> listaClientes;

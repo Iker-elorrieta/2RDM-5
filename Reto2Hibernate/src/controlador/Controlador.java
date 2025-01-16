@@ -43,11 +43,6 @@ public class Controlador implements ActionListener {
 		// btn Aceptar
 		this.vLogin.getBtnAceptar().addActionListener(this);
 		this.vLogin.getBtnAceptar().setActionCommand(enumAcciones.LOGIN.toString());
-
-		// btn Registrarse
-		this.vLogin.getBtnRegistrarse().addActionListener(this);
-		this.vLogin.getBtnRegistrarse().setActionCommand(enumAcciones.REGISTRARSE.toString());
-
 	}
 
 	private void inicializarPaneles() {

@@ -9,13 +9,14 @@ import javax.swing.JLabel;
 import javax.swing.JButton;
 import java.awt.Color;
 import javax.swing.SwingConstants;
+import java.awt.Font;
 
 public class VLogin  extends JPanel{
 
 	private static final long serialVersionUID = 1L;
 	private JTextField textFieldUser;
 	private JLabel lblUser;
-	private JButton btnAceptar, btnRegistrarse;
+	private JButton btnAceptar;
 	private JLabel lblError;
 	private JPasswordField textFieldPass;
 
@@ -54,10 +55,10 @@ public class VLogin  extends JPanel{
 		textFieldPass.setBounds(192, 170, 211, 20);
 		add(textFieldPass);
 		
-		btnRegistrarse = new JButton("Registrarse");
-		btnRegistrarse.setActionCommand("ACEPTAR");
-		btnRegistrarse.setBounds(189, 275, 219, 23);
-		add(btnRegistrarse);
+		JLabel lblLogin = new JLabel("Login");
+		lblLogin.setFont(new Font("Arial", Font.BOLD, 16));
+		lblLogin.setBounds(314, 37, 196, 54);
+		add(lblLogin);
 		lblError.setVisible(false);
 	}
 
@@ -67,14 +68,6 @@ public class VLogin  extends JPanel{
 
 	public void setBtnAceptar(JButton btnAceptar) {
 		this.btnAceptar = btnAceptar;
-	}
-
-	public JButton getBtnRegistrarse() {
-		return btnRegistrarse;
-	}
-
-	public void setBtnRegistrarse(JButton btnRegistrarse) {
-		this.btnRegistrarse = btnRegistrarse;
 	}
 
 	public JTextField getTextFieldUser() {
@@ -100,6 +93,4 @@ public class VLogin  extends JPanel{
 	public void setLblError(JLabel lblError) {
 		this.lblError = lblError;
 	}
-	
-	
 }

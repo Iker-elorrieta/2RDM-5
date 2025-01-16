@@ -9,7 +9,7 @@ import javax.swing.JTextField;
 
 public class Cliente  {
 
-	private final int PUERTO = 5000;
+	private final int PUERTO = 4500;
 	private final String HOST = "127.0.0.1";
 	private ObjectInputStream entrada;
 	private ObjectOutputStream salida;
