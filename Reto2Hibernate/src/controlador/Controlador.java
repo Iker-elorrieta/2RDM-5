@@ -85,6 +85,7 @@ public class Controlador implements ActionListener {
 				if (u.getUser().equals(usuario) && u.getContrasenha().equals(generarHash(contrasenha))) {
 					loginCorrecto = true;
 					usarioConectado = u;
+					System.out.println("registrado");
 					break;
 				}
 			}
@@ -104,12 +105,6 @@ public class Controlador implements ActionListener {
 			vLogin.getLblError().setText("Credenciales incorrectas.");
 		}*/
 	}
-
-	
-
-
-	
-
 
 	private String generarHash(String texto) {
 		String resumenString = "";
