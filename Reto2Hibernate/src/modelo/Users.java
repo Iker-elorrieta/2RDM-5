@@ -193,7 +193,7 @@ public class Users implements java.io.Serializable {
         SessionFactory sesion = HibernateUtil.getSessionFactory();
         Session session = sesion.openSession();
         String hql = "from Users where username = '" + usuario + "' AND password = '" + contrasena
-                + "' AND tipos.name = 'profesor' ";
+                + "' AND tipo_id= '3' ";
         Query q = session.createQuery(hql);
         Users usuarioComprobado = (Users) q.uniqueResult();
         if (usuarioComprobado == null) {

@@ -17,8 +17,7 @@ public class Principal extends JFrame {
 
 
 	public static enum enumAcciones {
-        CARGAR_PANEL_LOGIN, CARGAR_PANEL_MENU, LOGIN, DESCONECTAR, CARGAR_PANEL_HORARIO, CARGAR_PANEL_LISTA,VOLVER,TAREAS_PENDIENTES, CONFIRMAR_REUNION,RECHAZAR_REUNION,SELECCIONAR_PROFESOR
-
+        CARGAR_PANEL_LOGIN, CARGAR_PANEL_MENU, LOGIN, DESCONECTAR
     }
 	
 	public Principal() {
@@ -75,8 +74,6 @@ public class Principal extends JFrame {
 
 
 	// *** FIN creaci�n de paneles ***
-
-	
 
 	public JPanel getPanelContenedor() {
         return panelContenedor;

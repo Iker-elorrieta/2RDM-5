@@ -9,12 +9,10 @@ public class Servidor {
 
     public static void main(String[] args) {
         // TODO Auto-generated method stub
-
-        // TODO Auto-generated method stub
         ServerSocket servidor;
         boolean terminar = false;
         try {
-            servidor = new ServerSocket(2000);
+            servidor = new ServerSocket(4500);
             System.out.println("Servidor Encendido");
             while (!terminar) {
                 Socket conexionCli = servidor.accept();

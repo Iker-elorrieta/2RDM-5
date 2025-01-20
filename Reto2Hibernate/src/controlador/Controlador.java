@@ -45,20 +45,31 @@ public class Controlador implements ActionListener {
 
 
 	@Override
-    public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent e) {
         // TODO Auto-generated method stub
         Principal.enumAcciones accion = Principal.enumAcciones.valueOf(e.getActionCommand());
 
         switch (accion) {
         case LOGIN:
-        	incializarServidor();
+            incializarServidor();
             this.mConfirmarLogin(accion);
             break;
         case DESCONECTAR:
+            try {
+                dos.writeInt(4);
+                dis.close();
+                dos.close();
+                cliente.close();
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+
             this.vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_LOGIN);
-            break;
+
         default:
             break;
+
         }
     }
 

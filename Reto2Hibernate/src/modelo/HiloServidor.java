@@ -30,13 +30,6 @@ public class HiloServidor extends Thread {
                 case 1:
                     login(dis, dos);
                     break;
-                case 2:
-                //    verHorario(dis, dos);
-                    break;
-                case 3:
-                //    verOtrosHorarios(dis, dos);
-                    break;
-                    
                 case 4: 
                     terminar = true;
                 default:

@@ -21,7 +21,7 @@ public class PanelLogin extends JPanel {
      * Create the panel.
      */
     public PanelLogin() {
-    	setBackground(new Color(34, 139, 34));
+    	setBackground(new Color(128, 128, 255));
         setBounds(288, 11, 688, 541);
         setLayout(null);
 
@@ -52,9 +52,10 @@ public class PanelLogin extends JPanel {
         add(pfPass);
 
         btnLogin = new JButton("Aceptar");
-        btnLogin.setBounds(220, 360, 260, 41);
+        btnLogin.setForeground(new Color(0, 0, 0));
+        btnLogin.setBounds(302, 360, 160, 41);
         btnLogin.setFont(new Font("Arial", Font.BOLD, 14));
-        btnLogin.setBackground(new Color(100, 149, 237));
+        btnLogin.setBackground(new Color(255, 128, 255));
         add(btnLogin);
     }
 
