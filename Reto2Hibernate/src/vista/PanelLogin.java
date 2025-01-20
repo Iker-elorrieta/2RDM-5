@@ -5,8 +5,10 @@ import javax.swing.JPasswordField;
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.Font;
+import java.awt.Image;
 import javax.swing.border.EmptyBorder;
 import javax.swing.SwingConstants;
 
@@ -15,6 +17,7 @@ public class PanelLogin extends JPanel {
     private JTextField textFieldUser;
     private JPasswordField pfPass;
     private JButton btnLogin;
+    private JLabel lblFotoLogo;
     JLabel lblNewLabel;
 
     /**
@@ -28,32 +31,38 @@ public class PanelLogin extends JPanel {
         JLabel lblLogin = new JLabel("Login");
         lblLogin.setHorizontalAlignment(SwingConstants.CENTER);
         lblLogin.setFont(new Font("Arial", Font.BOLD, 22));
-        lblLogin.setBounds(220, 49, 200, 50);
+        lblLogin.setBounds(243, 202, 200, 50);
         add(lblLogin);
+        
+        lblFotoLogo = new JLabel();
+        lblFotoLogo.setBounds(222, 29, 238, 142);
+        add(lblFotoLogo);
+        lblFotoLogo.setIcon(new ImageIcon(new ImageIcon("archivos/logo.png").getImage()
+                .getScaledInstance(lblFotoLogo.getWidth(), lblFotoLogo.getHeight(), Image.SCALE_SMOOTH)));
 
         JLabel lblUser = new JLabel("Usuario:");
         lblUser.setFont(new Font("Arial", Font.PLAIN, 16));
-        lblUser.setBounds(175, 201, 80, 20);
+        lblUser.setBounds(214, 293, 80, 20);
         add(lblUser);
 
         textFieldUser = new JTextField();
-        textFieldUser.setBounds(279, 198, 200, 30);
+        textFieldUser.setBounds(333, 290, 200, 30);
         textFieldUser.setBorder(new EmptyBorder(5, 5, 5, 5));
         add(textFieldUser);
 
         JLabel lblPass = new JLabel("Contraseña:");
         lblPass.setFont(new Font("Arial", Font.PLAIN, 16));
-        lblPass.setBounds(175, 277, 100, 20);
+        lblPass.setBounds(194, 349, 100, 20);
         add(lblPass);
 
         pfPass = new JPasswordField();
-        pfPass.setBounds(279, 274, 200, 30);
+        pfPass.setBounds(333, 346, 200, 30);
         pfPass.setBorder(new EmptyBorder(5, 5, 5, 5));
         add(pfPass);
 
         btnLogin = new JButton("Aceptar");
         btnLogin.setForeground(new Color(0, 0, 0));
-        btnLogin.setBounds(302, 360, 160, 41);
+        btnLogin.setBounds(269, 429, 160, 41);
         btnLogin.setFont(new Font("Arial", Font.BOLD, 14));
         btnLogin.setBackground(new Color(255, 128, 255));
         add(btnLogin);

@@ -42,7 +42,7 @@ public class Principal extends JFrame {
             }      
     }
 
-	// *** Creaci�n de paneles ***
+	// *** Creacion de paneles ***
 
 	private void mCrearPanelContenedor() {
 
@@ -72,8 +72,7 @@ public class Principal extends JFrame {
         panelMenu.setVisible(false);
     }
 
-
-	// *** FIN creaci�n de paneles ***
+	// *** FIN creacion de paneles ***
 
 	public JPanel getPanelContenedor() {
         return panelContenedor;
