@@ -37,19 +37,19 @@ public class PanelMenu extends JPanel {
         add(btnDesconectar);
 
         lblFotoHorario = new JLabel();
-        lblFotoHorario.setBounds(60, 166, 204, 116);
+        lblFotoHorario.setBounds(33, 190, 204, 116);
         add(lblFotoHorario);
         lblFotoHorario.setIcon(new ImageIcon(new ImageIcon("archivos/horario.png").getImage()
                 .getScaledInstance(lblFotoHorario.getWidth(), lblFotoHorario.getHeight(), Image.SCALE_SMOOTH)));
 
         lblFotoAlumno = new JLabel();
-        lblFotoAlumno.setBounds(408, 166, 204, 116);
+        lblFotoAlumno.setBounds(252, 190, 204, 116);
         add(lblFotoAlumno);
         lblFotoAlumno.setIcon(new ImageIcon(new ImageIcon("archivos/alumno.png").getImage()
                 .getScaledInstance(lblFotoAlumno.getWidth(), lblFotoAlumno.getHeight(), Image.SCALE_SMOOTH)));
 
         lblFotoReuniones = new JLabel();
-        lblFotoReuniones.setBounds(231, 332, 204, 116);
+        lblFotoReuniones.setBounds(474, 190, 204, 116);
         add(lblFotoReuniones);
         lblFotoReuniones.setIcon(new ImageIcon(new ImageIcon("archivos/reuniones.png").getImage()
                 .getScaledInstance(lblFotoReuniones.getWidth(), lblFotoReuniones.getHeight(), Image.SCALE_SMOOTH)));
@@ -57,19 +57,19 @@ public class PanelMenu extends JPanel {
         JLabel lblHorario = new JLabel("Horario");
         lblHorario.setFont(new Font("Arial", Font.PLAIN, 16));
         lblHorario.setHorizontalAlignment(SwingConstants.CENTER);
-        lblHorario.setBounds(60, 293, 204, 28);
+        lblHorario.setBounds(43, 327, 204, 28);
         add(lblHorario);
 
         JLabel lblOtros = new JLabel("Otros horarios");
         lblOtros.setHorizontalAlignment(SwingConstants.CENTER);
         lblOtros.setFont(new Font("Arial", Font.PLAIN, 16));
-        lblOtros.setBounds(408, 293, 204, 28);
+        lblOtros.setBounds(484, 327, 204, 28);
         add(lblOtros);
 
         JLabel lblReuniones = new JLabel("Reuniones");
         lblReuniones.setHorizontalAlignment(SwingConstants.CENTER);
         lblReuniones.setFont(new Font("Arial", Font.PLAIN, 16));
-        lblReuniones.setBounds(231, 459, 204, 28);
+        lblReuniones.setBounds(241, 327, 204, 28);
         add(lblReuniones);
 
     }
