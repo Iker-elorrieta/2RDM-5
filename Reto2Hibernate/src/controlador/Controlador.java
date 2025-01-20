@@ -2,6 +2,8 @@ package controlador;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -14,8 +16,8 @@ public class Controlador implements ActionListener {
 
 	private vista.Principal vistaPrincipal;
     private Socket cliente;
-    private ObjectOutputStream dos;
-    private ObjectInputStream dis;
+    private DataOutputStream dos;
+    private DataInputStream dis;
     private int id = 0;
 
 	/*
@@ -30,8 +32,8 @@ public class Controlador implements ActionListener {
 
         try {
             cliente = new Socket("localhost", 4500);
-            dos = new ObjectOutputStream(cliente.getOutputStream());
-            dis = new ObjectInputStream(cliente.getInputStream());
+            dos = new DataOutputStream(cliente.getOutputStream());
+            dis = new DataInputStream(cliente.getInputStream());
 
         } catch (IOException e) {
             // TODO Auto-generated catch block
@@ -49,6 +51,7 @@ public class Controlador implements ActionListener {
 
         switch (accion) {
         case LOGIN:
+        	incializarServidor();
             this.mConfirmarLogin(accion);
             break;
         case DESCONECTAR:
@@ -63,14 +66,14 @@ public class Controlador implements ActionListener {
         // TODO Auto-generated method stub
 
         try {
-            dos.writeObject(1);
+            dos.writeInt(1);
             dos.flush();
-            dos.writeObject(this.vistaPrincipal.getPanelLogin().getTextFieldUser().getText());
+            dos.writeUTF(this.vistaPrincipal.getPanelLogin().getTextFieldUser().getText());
             dos.flush();
-            dos.writeObject(new String(this.vistaPrincipal.getPanelLogin().getTextFieldPass().getPassword()));
+            dos.writeUTF(new String(this.vistaPrincipal.getPanelLogin().getTextFieldPass().getPassword()));
             dos.flush();
-            id = (int) dis.readObject();
-        } catch (IOException | ClassNotFoundException e) {
+            id = (int) dis.readInt();
+        } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -80,6 +83,18 @@ public class Controlador implements ActionListener {
             this.vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_MENU);
         } else {
             JOptionPane.showMessageDialog(null, "No existe ningun profesor con esas credenciales");
+        }
+    }
+	
+	private void incializarServidor() {
+        // TODO Auto-generated method stub
+        try {
+            cliente = new Socket("localhost", 4500);
+            dos = new DataOutputStream(cliente.getOutputStream());
+            dis = new DataInputStream(cliente.getInputStream());
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 }

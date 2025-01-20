@@ -9,6 +9,10 @@ import java.util.Set;
  */
 public class Ciclos implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int id;
 	private String nombre;
 	private Set matriculacioneses = new HashSet(0);

@@ -1,50 +1,67 @@
 package modelo;
 
-import java.io.*;
-import java.util.ArrayList;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
 
 public class HiloServidor extends Thread {
-	private ObjectInputStream entrada;
-	private ObjectOutputStream salida;
-	private ArrayList<ObjectOutputStream> listaClientes;
-	private ArrayList<Usuario> usuarios;
 
-	public HiloServidor(ObjectOutputStream salida, ObjectInputStream entrada, ArrayList<ObjectOutputStream> listaClientes, ArrayList<Usuario> usuarios) throws IOException {
-		this.listaClientes = listaClientes;
-		this.salida = salida;
-		this.entrada = entrada;
-		this.usuarios = usuarios;
-	}
+    Socket conexionCli;
 
-	@Override
-	public void run() {
+    public HiloServidor(Socket conexionCli) {
+        // TODO Auto-generated constructor stub
+        this.conexionCli = conexionCli;
+    }
 
+    public void run() {
 
-		String mensaje;
-		try {
-		while ((mensaje = (String) entrada.readObject()) != null) {
-			if(mensaje.equals("//registrar")) {
-				synchronized (usuarios) {
-					// Recibimos atraves de un clave especial el obejto
-					usuarios.add((Usuario) entrada.readObject());
-					System.out.println("Registrado nuevo usuario");
-				}
-			}else {
-				for (ObjectOutputStream out : listaClientes) {
-					out.writeObject(mensaje);
-					out.flush();
-				}
-			}
-		}
-		} catch (IOException e) {
-			e.printStackTrace();
-			// Si el cliente se desconecta inesperadamente
-			listaClientes.remove(salida);
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+        int opcion = 0;
+        boolean terminar = false;
+
+        try {
+            DataOutputStream dos = new DataOutputStream(conexionCli.getOutputStream());
+            DataInputStream dis = new DataInputStream(conexionCli.getInputStream());
+            while (!terminar) {
+
+                opcion = (int) dis.readInt();
+
+                switch (opcion) {
+                case 1:
+                    login(dis, dos);
+                    break;
+                case 2:
+                //    verHorario(dis, dos);
+                    break;
+                case 3:
+                //    verOtrosHorarios(dis, dos);
+                    break;
+                    
+                case 4: 
+                    terminar = true;
+                default:
+                    break;
+                }
+
+            }
+        } catch (IOException  e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+    
+    private void login(DataInputStream dis, DataOutputStream dos) {
+        // TODO Auto-generated method stub
+
+        try {
+            String usuario =  dis.readUTF();
+            String password = dis.readUTF();
+            int usuarioComprobado = new Users().Login(usuario, password);
+            dos.writeInt(usuarioComprobado);
+            dos.flush();
+        } catch (IOException  e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 }
-
-

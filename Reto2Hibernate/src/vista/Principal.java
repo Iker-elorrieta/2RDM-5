@@ -12,6 +12,7 @@ public class Principal extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	private PanelLogin panelLogin;
+	private PanelMenu panelMenu;
 	private JPanel panelContenedor;
 
 
@@ -20,27 +21,26 @@ public class Principal extends JFrame {
 
     }
 	
-	
-
-
 	public Principal() {
 		mCrearPanelContenedor();
 		mCrearVLogin();
+		mCrearPanelMenu();
 	}
 	
 	public void mVisualizarPaneles(enumAcciones panel) {
 
 		panelLogin.setVisible(false);
+		panelMenu.setVisible(false);
         switch (panel) {
         case CARGAR_PANEL_LOGIN:
         	panelLogin.setVisible(true);
             break;
-       
+        case CARGAR_PANEL_MENU:
+        	panelMenu.setVisible(true);
+        	break;
         default:
             break;
-            }
-
-        
+            }      
     }
 
 	// *** Creaci�n de paneles ***
@@ -63,6 +63,15 @@ public class Principal extends JFrame {
 		panelContenedor.setBounds(panelLogin.getBounds());
 		panelLogin.setVisible(true);
 	}
+	
+	private void mCrearPanelMenu() {
+        // TODO Auto-generated method stub
+        panelMenu = new PanelMenu();
+        panelMenu.setLocation(0, 11);
+        panelContenedor.add(panelMenu);
+        panelContenedor.setBounds(panelMenu.getBounds());
+        panelMenu.setVisible(false);
+    }
 
 
 	// *** FIN creaci�n de paneles ***
@@ -85,7 +94,13 @@ public class Principal extends JFrame {
         this.panelLogin = panelLogin;
     }
 
+    public PanelMenu getPanelMenu() {
+        return panelMenu;
+    }
 
+    public void setPanelMenu(PanelMenu panelMenu) {
+        this.panelMenu = panelMenu;
+    }
 
 
 
