@@ -41,7 +41,9 @@ public class Controlador implements ActionListener {
         }
         // VENTANA LOGIN
         this.vistaPrincipal.getPanelLogin().getBtnLogin().addActionListener(this);
-        this.vistaPrincipal.getPanelLogin().getBtnLogin().setActionCommand(Principal.enumAcciones.LOGIN.toString());}
+        this.vistaPrincipal.getPanelLogin().getBtnLogin().setActionCommand(Principal.enumAcciones.LOGIN.toString());
+    	this.vistaPrincipal.getPanelMenu().getBtnDesconectar().addActionListener(this);
+    	this.vistaPrincipal.getPanelMenu().getBtnDesconectar().setActionCommand(Principal.enumAcciones.DESCONECTAR.toString());}
 
 
 	@Override
@@ -57,6 +59,7 @@ public class Controlador implements ActionListener {
         case DESCONECTAR:
             try {
                 dos.writeInt(4);
+                dos.flush();
                 dis.close();
                 dos.close();
                 cliente.close();
