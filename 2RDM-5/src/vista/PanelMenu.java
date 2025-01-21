@@ -104,4 +104,12 @@ public class PanelMenu extends JPanel {
     public void setBtnDesconectar(JButton btnDesconectar) {
         this.btnDesconectar = btnDesconectar;
     }
+    
+    public JLabel getlblFotoAlumno() {
+        return lblFotoAlumno;
+    }
+
+    public void setlblFotoAlumno(JLabel lblFotoAlumno) {
+        this.lblFotoAlumno = lblFotoAlumno;
+    }
 }
