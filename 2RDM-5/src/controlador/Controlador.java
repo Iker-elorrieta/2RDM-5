@@ -8,6 +8,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 import javax.swing.JOptionPane;
 import vista.Principal;
 import vista.Principal.enumAcciones;
@@ -111,4 +116,30 @@ public class Controlador implements ActionListener {
             e.printStackTrace();
         }
     }
+
+	public int loginAndroid(String username, String password) {
+		int role = 0;
+        int tipoId = 0; // para triggerear el default,que probablemente diga error
+
+ 
+        String query = "SELECT tipo_id FROM users WHERE username = ? AND password = ?";
+                                //mete la config de la conexiona a la base
+        try (Connection connection = DriverManager.getConnection("localhost", "root", "");
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                role = resultSet.getInt("tipo_id");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return role;
+    }
+
 }
