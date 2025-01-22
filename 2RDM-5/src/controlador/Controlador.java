@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -28,13 +29,14 @@ import modelo.Reuniones;
 import vista.Principal;
 import vista.Principal.enumAcciones;
 
-public class Controlador implements ActionListener {
+public class Controlador implements ActionListener, MouseListener {
 
 	private vista.Principal vistaPrincipal;
 	private Socket cliente;
 	private DataOutputStream dos;
 	private DataInputStream dis;
 	private ObjectInputStream ois;
+	private ObjectOutputStream oos;
 	private ArrayList<Profesor> profesores = new ArrayList<Profesor>();
 	private ArrayList<Reuniones> reuniones = new ArrayList<Reuniones>();
 	private int id = 0;
@@ -62,6 +64,10 @@ public class Controlador implements ActionListener {
 		this.vistaPrincipal.getPanelMenu().getBtnDesconectar().addActionListener(this);
 		this.vistaPrincipal.getPanelMenu().getBtnDesconectar()
 				.setActionCommand(Principal.enumAcciones.DESCONECTAR.toString());
+
+		this.vistaPrincipal.getPanelMenu().getLblFotoAlumno().addMouseListener(this);
+		this.vistaPrincipal.getPanelMenu().getLblFotoReuniones().addMouseListener(this);
+		this.vistaPrincipal.getPanelMenu().getLblFotoHorario().addMouseListener(this);
 	}
 
 	@Override
@@ -74,7 +80,9 @@ public class Controlador implements ActionListener {
 			incializarServidor();
 			try {
 				dos = new DataOutputStream(cliente.getOutputStream());
+				oos = new ObjectOutputStream(cliente.getOutputStream());
 				dis = new DataInputStream(cliente.getInputStream());
+				ois = new ObjectInputStream(cliente.getInputStream());
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -287,6 +295,29 @@ public class Controlador implements ActionListener {
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
 
 	}
 
