@@ -26,6 +26,7 @@ public class Principal extends JFrame {
 		mCrearVLogin();
 		mCrearPanelMenu();
 		mCrearPanelHorario();
+		mCrearPanelLista();
 	}
 
 	private void mCrearPanelHorario() {
@@ -42,6 +43,7 @@ public class Principal extends JFrame {
 		panelLogin.setVisible(false);
 		panelMenu.setVisible(false);
 		panelHorario.setVisible(false);
+		panelLista.setVisible(false);
 		switch (panel) {
 		case CARGAR_PANEL_LOGIN:
 			panelLogin.setVisible(true);
@@ -52,6 +54,8 @@ public class Principal extends JFrame {
 		case CARGAR_PANEL_HORARIO:
 			panelHorario.setVisible(true);
 			break;
+		case CARGAR_PANEL_LISTA:
+			panelLista.setVisible(true);
 		default:
 			break;
 		}
@@ -85,6 +89,15 @@ public class Principal extends JFrame {
 		panelContenedor.add(panelMenu);
 		panelContenedor.setBounds(panelMenu.getBounds());
 		panelMenu.setVisible(false);
+	}
+	
+	private void mCrearPanelLista() {
+		 // TODO Auto-generated method stub
+        panelLista = new PanelLista();
+        panelLista.setLocation(0, 11);
+        panelContenedor.add(panelLista);
+        panelContenedor.setBounds(panelLista.getBounds());
+        panelLista.setVisible(false);
 	}
 
 	// *** FIN creacion de paneles ***

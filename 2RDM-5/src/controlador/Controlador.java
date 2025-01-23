@@ -58,7 +58,6 @@ public class Controlador implements ActionListener, MouseListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// VENTANA LOGIN
 		this.vistaPrincipal.getPanelLogin().getBtnLogin().addActionListener(this);
 		this.vistaPrincipal.getPanelLogin().getBtnLogin().setActionCommand(Principal.enumAcciones.LOGIN.toString());
 		this.vistaPrincipal.getPanelMenu().getBtnDesconectar().addActionListener(this);
@@ -68,6 +67,9 @@ public class Controlador implements ActionListener, MouseListener {
 		this.vistaPrincipal.getPanelMenu().getLblFotoAlumno().addMouseListener(this);
 		this.vistaPrincipal.getPanelMenu().getLblFotoReuniones().addMouseListener(this);
 		this.vistaPrincipal.getPanelMenu().getLblFotoHorario().addMouseListener(this);
+		
+		this.vistaPrincipal.getPanelHorario().getBtnVolver().addActionListener(this);
+        this.vistaPrincipal.getPanelHorario().getBtnVolver().setActionCommand(Principal.enumAcciones.VOLVER.toString());
 	}
 
 	@Override
@@ -157,9 +159,6 @@ public class Controlador implements ActionListener, MouseListener {
 			mAbrirHorario();
 		} else if (source == this.vistaPrincipal.getPanelMenu().getLblFotoAlumno()) {
 			mAbrirHorarioOtros();
-		} else if (source == this.vistaPrincipal.getPanelMenu().getLblFotoReuniones()) {
-			mAbrirReuniones();
-			this.vistaPrincipal.getPanelHorario().getBtnPendientes().setVisible(true);
 		}
 
 	}
@@ -247,7 +246,6 @@ public class Controlador implements ActionListener, MouseListener {
 				return false;
 			}
 		};
-
 		tabla.setModel(modelo);
 	}
 
@@ -279,23 +277,6 @@ public class Controlador implements ActionListener, MouseListener {
 
 	}
 
-	@SuppressWarnings("unchecked")
-	private void mAbrirReuniones() {
-		// TODO Auto-generated method stub
-		this.vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_HORARIO);
-
-		try {
-			dos.writeInt(4);
-			dos.flush();
-			dos.writeInt(id);
-			dos.flush();
-			reuniones = (ArrayList<Reuniones>) ois.readObject();
-			cargarHorario((String[][]) ois.readObject(), this.vistaPrincipal.getPanelHorario().getTablaHorario());
-			cargarColoresTabla(this.vistaPrincipal.getPanelHorario().getTablaHorario());
-		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
