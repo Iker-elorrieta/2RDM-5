@@ -62,13 +62,13 @@ public class PanelMenu extends JPanel {
         JLabel lblOtros = new JLabel("Otros horarios");
         lblOtros.setHorizontalAlignment(SwingConstants.CENTER);
         lblOtros.setFont(new Font("Arial", Font.PLAIN, 16));
-        lblOtros.setBounds(484, 327, 204, 28);
+        lblOtros.setBounds(252, 327, 204, 28);
         add(lblOtros);
 
         JLabel lblReuniones = new JLabel("Reuniones");
         lblReuniones.setHorizontalAlignment(SwingConstants.CENTER);
         lblReuniones.setFont(new Font("Arial", Font.PLAIN, 16));
-        lblReuniones.setBounds(241, 327, 204, 28);
+        lblReuniones.setBounds(474, 327, 204, 28);
         add(lblReuniones);
 
     }

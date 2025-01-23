@@ -1,7 +1,5 @@
 package controlador;
 
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -12,20 +10,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.ArrayList;
-
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-
 import modelo.Profesor;
-import modelo.Reuniones;
 import vista.Principal;
 import vista.Principal.enumAcciones;
 
@@ -38,7 +28,6 @@ public class Controlador implements ActionListener, MouseListener {
 	private ObjectInputStream ois;
 	private ObjectOutputStream oos;
 	private ArrayList<Profesor> profesores = new ArrayList<Profesor>();
-	private ArrayList<Reuniones> reuniones = new ArrayList<Reuniones>();
 	private int id = 0;
 
 	/*
@@ -70,6 +59,9 @@ public class Controlador implements ActionListener, MouseListener {
 		
 		this.vistaPrincipal.getPanelHorario().getBtnVolver().addActionListener(this);
         this.vistaPrincipal.getPanelHorario().getBtnVolver().setActionCommand(Principal.enumAcciones.VOLVER.toString());
+        
+        this.vistaPrincipal.getPanelLista().getBtnVolver().addActionListener(this);
+        this.vistaPrincipal.getPanelLista().getBtnVolver().setActionCommand(Principal.enumAcciones.VOLVER.toString());
 	}
 
 	@Override
@@ -131,7 +123,7 @@ public class Controlador implements ActionListener, MouseListener {
 		}
 
 		if (id != 0) {
-			System.out.println("Hola");
+			//System.out.println("Hola");
 			this.vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_MENU);
 		} else {
 			JOptionPane.showMessageDialog(null, "No existe ningun profesor con esas credenciales");
@@ -158,50 +150,9 @@ public class Controlador implements ActionListener, MouseListener {
 		if (source == this.vistaPrincipal.getPanelMenu().getLblFotoHorario()) {
 			mAbrirHorario();
 		} else if (source == this.vistaPrincipal.getPanelMenu().getLblFotoAlumno()) {
-			mAbrirHorarioOtros();
+			mAbrirOtrosHorario();
 		}
 
-	}
-
-	private void cargarColoresTabla(JTable tabla) {
-		// TODO Auto-generated method sub
-
-		DefaultTableCellRenderer renderizador = new DefaultTableCellRenderer() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-					boolean hasFocus, int row, int column) {
-				Component componente = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
-						column);
-
-				componente.setBackground(Color.WHITE);
-				componente.setForeground(Color.BLACK);
-
-				if (((String) value).contains("-R")) {
-					componente.setBackground(Color.RED);
-					componente.setForeground(Color.BLACK);
-				} else if (((String) value).contains("-C")) {
-					componente.setBackground(Color.GREEN);
-					componente.setForeground(Color.BLACK);
-				} else if (((String) value).contains("-P")) {
-					componente.setBackground(Color.GRAY);
-					componente.setForeground(Color.BLACK);
-				} else if (((String) value).contains("-E")) {
-					componente.setBackground(Color.ORANGE);
-					componente.setForeground(Color.BLACK);
-				}
-
-				return componente;
-			}
-		};
-
-		for (int i = 1; i < tabla.getColumnCount(); i++) {
-			tabla.getColumnModel().getColumn(i).setCellRenderer(renderizador);
-		}
 	}
 
 	private void cargarLista(ArrayList<String> datos) { // TODO Auto-generated
@@ -249,7 +200,7 @@ public class Controlador implements ActionListener, MouseListener {
 		tabla.setModel(modelo);
 	}
 
-	private void mAbrirHorarioOtros() {
+	private void mAbrirOtrosHorario() {
 		// TODO Auto-generated method stub
 
 		this.vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_LISTA);

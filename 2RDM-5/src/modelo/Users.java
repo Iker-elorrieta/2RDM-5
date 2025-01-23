@@ -260,7 +260,7 @@ public class Users implements java.io.Serializable {
         return dia;
     }
 
-    public ArrayList<String> getOtrosProfesores(int idUsuario) {
+    public ArrayList<String> getOtrosProfes(int idUsuario) {
         ArrayList<String> profesores = new ArrayList<String>();
         SessionFactory sesion = HibernateUtil.getSessionFactory();
         Session session = sesion.openSession();
