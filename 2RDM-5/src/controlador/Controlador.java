@@ -1,5 +1,7 @@
 package controlador;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -14,6 +16,8 @@ import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import modelo.Profesor;
 import vista.Principal;
@@ -193,19 +197,71 @@ public class Controlador implements ActionListener, MouseListener {
 
 	}
 
-	private void cargarHorario(String[][] horario, JTable tabla) {
+private void cargarHorario(String[][] horario, JTable tabla) {
+        
+        DefaultTableModel modelo = new DefaultTableModel(horario,
+                new String[] { "Hora/Día", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes" }) {
+            private static final long serialVersionUID = 1L;
 
-		DefaultTableModel modelo = new DefaultTableModel(horario,
-				new String[] { "Hora/Día", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes"}) {
-			private static final long serialVersionUID = 1L;
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; 
+            }
+        };
 
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				return false;
-			}
-		};
-		tabla.setModel(modelo);
-	}
+        tabla.setModel(modelo);
+
+        DefaultTableCellRenderer renderizador = new DefaultTableCellRenderer() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
+                
+                JTextArea textArea = new JTextArea();
+                textArea.setText(value == null ? "" : value.toString());
+                textArea.setWrapStyleWord(true); 
+                textArea.setLineWrap(true); 
+                textArea.setOpaque(true); 
+                
+                if (value != null && value instanceof String) {
+                    String cellValue = (String) value;
+
+                    if (cellValue.contains("-R")) {
+                        textArea.setBackground(Color.RED);
+                        textArea.setForeground(Color.BLACK);
+                    } else if (cellValue.contains("-C")) {
+                        textArea.setBackground(Color.GREEN);
+                        textArea.setForeground(Color.BLACK);
+                    } else if (cellValue.contains("-P")) {
+                        textArea.setBackground(Color.GRAY);
+                        textArea.setForeground(Color.BLACK);
+                    } else if (cellValue.contains("-E")) {
+                        textArea.setBackground(Color.ORANGE);
+                        textArea.setForeground(Color.BLACK);
+                    } else {
+                        textArea.setBackground(table.getBackground());
+                        textArea.setForeground(table.getForeground());
+                    }
+                }
+
+                if (isSelected) {
+                    textArea.setBackground(table.getSelectionBackground());
+                    textArea.setForeground(table.getSelectionForeground());
+                }
+
+                return textArea;
+            }
+        };
+
+        
+        for (int i = 1; i < tabla.getColumnCount(); i++) {
+            tabla.getColumnModel().getColumn(i).setCellRenderer(renderizador);
+        }
+
+
+        tabla.setRowHeight(75); 
+    }
 
 	private void mAbrirOtrosHorario() {
 		// TODO Auto-generated method stub
