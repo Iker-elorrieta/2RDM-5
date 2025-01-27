@@ -61,7 +61,7 @@ public class Controlador implements ActionListener, MouseListener {
         this.vistaPrincipal.getPanelHorario().getBtnVolver().setActionCommand(Principal.enumAcciones.VOLVER.toString());
         
         this.vistaPrincipal.getPanelLista().getBtnVolver().addActionListener(this);
-        this.vistaPrincipal.getPanelLista().getBtnVolver().setActionCommand(Principal.enumAcciones.VOLVER.toString());
+        this.vistaPrincipal.getPanelLista().getBtnVolver().setActionCommand(Principal.enumAcciones.VOLVER.toString());     
 	}
 
 	@Override
@@ -189,7 +189,7 @@ public class Controlador implements ActionListener, MouseListener {
 	private void cargarHorario(String[][] horario, JTable tabla) {
 
 		DefaultTableModel modelo = new DefaultTableModel(horario,
-				new String[] { "Hora/Día", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo" }) {
+				new String[] { "Hora/Día", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes"}) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

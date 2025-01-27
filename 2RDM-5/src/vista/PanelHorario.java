@@ -32,10 +32,10 @@ public class PanelHorario extends JPanel {
 
         tablaHorario = new JTable();
         tablaHorario.setModel(new DefaultTableModel(
-                new String[][] { { "08:00-09:00", "", "", "", "", "", "", "" },
-                        { "09:00-10:00", "", "", "", "", "", "", "" }, { "10:00-11:00", "", "", "", "", "", "", "" },
-                        { "11:00-12:00", "", "", "", "", "", "", "" }, { "12:00-13:00", "", "", "", "", "", "", "" }, },
-                new String[] { "Hora/Día", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo" }) {
+                new String[][] { { "08:00-09:00", "", "", "", "", ""},
+                        { "09:00-10:00", "", "", "", "", ""}, { "10:00-11:00", "", "", "", "", ""},
+                        { "11:00-12:00", "", "", "", "", ""}, { "12:00-13:00", "", "", "", "", ""}, },
+                new String[] { "Hora/Día", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes"}) {
             private static final long serialVersionUID = 1L;
             boolean[] columnEditables = new boolean[] { false, false, false, false, false, false, false, false };
 
