@@ -30,12 +30,12 @@ public class PanelLista extends JPanel {
         scrollPane.setViewportView(lista);
 
         btnVolver = new JButton("Volver");
-        btnVolver.setFont(new Font("Arial", Font.PLAIN, 16));
+        btnVolver.setFont(new Font("Arial", Font.PLAIN, 18));
         btnVolver.setBounds(513, 30, 129, 37);
         add(btnVolver);
 
         btnSeleccionar = new JButton("Seleccionar");
-        btnSeleccionar.setFont(new Font("Arial", Font.PLAIN, 16));
+        btnSeleccionar.setFont(new Font("Arial", Font.PLAIN, 18));
         btnSeleccionar.setBounds(402, 154, 240, 37);
         add(btnSeleccionar);
     }
