@@ -44,7 +44,7 @@ public class PanelHorario extends JPanel {
             }
         });
         tablaHorario.setFont(new Font("Arial", Font.PLAIN, 11));
-        tablaHorario.setRowHeight(40);
+        tablaHorario.setRowHeight(50);
 
         
         scrollPane.setViewportView(tablaHorario);
