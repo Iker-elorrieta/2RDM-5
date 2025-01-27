@@ -17,9 +17,14 @@ import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+
+import modelo.Centros;
 import modelo.Profesor;
+import modelo.Reuniones;
 import vista.Principal;
 import vista.Principal.enumAcciones;
 
@@ -32,6 +37,8 @@ public class Controlador implements ActionListener, MouseListener {
 	private ObjectInputStream ois;
 	private ObjectOutputStream oos;
 	private ArrayList<Profesor> profesores = new ArrayList<Profesor>();
+	private ArrayList<Reuniones> reuniones = new ArrayList<Reuniones>();
+	private ArrayList<Centros> centros = new ArrayList<Centros>();
 	private int id = 0;
 
 	/*
@@ -69,8 +76,44 @@ public class Controlador implements ActionListener, MouseListener {
 				.setActionCommand(Principal.enumAcciones.SELECCIONAR_PROFESOR.toString());
         this.vistaPrincipal.getPanelLista().getBtnVolver().addActionListener(this);
         this.vistaPrincipal.getPanelLista().getBtnVolver().setActionCommand(Principal.enumAcciones.VOLVER.toString());     
+	
+        this.vistaPrincipal.getPanelTareas().getBtnConfirmar().addActionListener(this);
+		this.vistaPrincipal.getPanelTareas().getBtnConfirmar()
+				.setActionCommand(Principal.enumAcciones.CONFIRMAR_REUNION.toString());
+
+		this.vistaPrincipal.getPanelTareas().getBtnRechazar().addActionListener(this);
+		this.vistaPrincipal.getPanelTareas().getBtnRechazar()
+				.setActionCommand(Principal.enumAcciones.RECHAZAR_REUNION.toString());
+
+		this.vistaPrincipal.getPanelTareas().getBtnVolver().addActionListener(this);
+		this.vistaPrincipal.getPanelTareas().getBtnVolver().setActionCommand(Principal.enumAcciones.VOLVER.toString());
+
+		this.vistaPrincipal.getPanelTareas().getTablaHorario().getSelectionModel()
+				.addListSelectionListener(new ListSelectionListener() {
+					@Override
+					public void valueChanged(ListSelectionEvent e) {
+
+						habilitarBotones();
+					}
+				});
 	}
 
+	protected void habilitarBotones() {
+		// TODO Auto-generated method stub
+		if (this.vistaPrincipal.getPanelTareas().getTablaHorario().getSelectedRow() != -1) {
+			if (reuniones.get(this.vistaPrincipal.getPanelTareas().getTablaHorario().getSelectedRow()).getEstado()
+					.equalsIgnoreCase("pendiente")
+					|| reuniones.get(this.vistaPrincipal.getPanelTareas().getTablaHorario().getSelectedRow())
+							.getEstado().equalsIgnoreCase("conflicto")) {
+				this.vistaPrincipal.getPanelTareas().getBtnConfirmar().setEnabled(true);
+				this.vistaPrincipal.getPanelTareas().getBtnRechazar().setEnabled(true);
+			} else {
+				this.vistaPrincipal.getPanelTareas().getBtnConfirmar().setEnabled(false);
+				this.vistaPrincipal.getPanelTareas().getBtnRechazar().setEnabled(false);
+			}
+		}
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -106,6 +149,16 @@ public class Controlador implements ActionListener, MouseListener {
 			seleccionarProfesor();
 			this.vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_HORARIO);
 			break;
+		case TAREAS_PENDIENTES:
+			cargarPendiendes();
+			this.vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_TAREAS);
+			break;
+		case CONFIRMAR_REUNION:
+			cambiarTarea("aceptada");
+			break;
+		case RECHAZAR_REUNION:
+			cambiarTarea("denegada");
+			break;
 		case VOLVER:
 			this.vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_MENU);
 			;
@@ -115,6 +168,28 @@ public class Controlador implements ActionListener, MouseListener {
 			break;
 
 		}
+	}
+
+	private void cambiarTarea(String estado) {
+		// TODO Auto-generated method stub
+		try {
+			dos.writeInt(5);
+			dos.flush();
+			dos.writeInt(reuniones.get(this.vistaPrincipal.getPanelTareas().getTablaHorario().getSelectedRow())
+					.getIdReunion());
+			dos.flush();
+			dos.writeUTF(estado);
+			dos.flush();
+			this.vistaPrincipal.getPanelTareas().getTablaHorario().getModel().setValueAt(estado,
+					this.vistaPrincipal.getPanelTareas().getTablaHorario().getSelectedRow(), 5);
+			reuniones.get(this.vistaPrincipal.getPanelTareas().getTablaHorario().getSelectedRow()).setEstado(estado);
+			this.vistaPrincipal.getPanelTareas().getBtnConfirmar().setEnabled(false);
+			this.vistaPrincipal.getPanelTareas().getBtnRechazar().setEnabled(false);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		;
 	}
 
 	private void mConfirmarLogin(enumAcciones accion) {
@@ -318,6 +393,32 @@ private void cargarHorario(String[][] horario, JTable tabla) {
 		}
 	}
 
+	private void cargarPendiendes() {
+		// TODO Auto-generated method stub
+		DefaultTableModel modelo = new DefaultTableModel(
+				new String[] { "Titulo", "Asunto", "Centro", "Aula", "Fecha", "Estado" }, 0) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+
+		};
+		for (Reuniones reunion : reuniones) {
+			String centroReu = "";
+			for (Centros centro : centros) {
+				if (centro.getIdCentro() == Integer.parseInt(reunion.getIdCentro())) {
+					centroReu = centro.getNombre();
+				}
+			}
+			Object[] fila = { reunion.getTitulo(), reunion.getAsunto(), centroReu, reunion.getAula(),
+					reunion.getFecha().toString(), reunion.getEstado() };
+			modelo.addRow(fila);
+		}
+		this.vistaPrincipal.getPanelTareas().getTablaHorario().setModel(modelo);
+	}
+	
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub

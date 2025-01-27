@@ -16,9 +16,10 @@ public class Principal extends JFrame {
 	private PanelHorario panelHorario;
 	private PanelLista panelLista;
 	private JPanel panelContenedor;
+	private PanelTareas panelTareas;
 
 	public static enum enumAcciones {
-		CARGAR_PANEL_LOGIN, CARGAR_PANEL_MENU, LOGIN, DESCONECTAR, VOLVER, CARGAR_PANEL_HORARIO, CARGAR_PANEL_LISTA, SELECCIONAR_PROFESOR
+		CARGAR_PANEL_LOGIN, CARGAR_PANEL_MENU, LOGIN, DESCONECTAR, VOLVER, CARGAR_PANEL_HORARIO, CARGAR_PANEL_LISTA, SELECCIONAR_PROFESOR, TAREAS_PENDIENTES, CARGAR_PANEL_TAREAS, CONFIRMAR_REUNION, RECHAZAR_REUNION
 	}
 
 	public Principal() {
@@ -56,6 +57,8 @@ public class Principal extends JFrame {
 			break;
 		case CARGAR_PANEL_LISTA:
 			panelLista.setVisible(true);
+		case CARGAR_PANEL_TAREAS:
+			panelTareas.setVisible(true);
 		default:
 			break;
 		}
@@ -142,4 +145,11 @@ public class Principal extends JFrame {
 		this.panelLista = panelLista;
 	}
 
+	public PanelTareas getPanelTareas() {
+		return panelTareas;
+	}
+
+	public void setPanelTareas(PanelTareas panelTareas) {
+		this.panelTareas = panelTareas;
+	}
 }
