@@ -60,6 +60,9 @@ public class Controlador implements ActionListener, MouseListener {
 		this.vistaPrincipal.getPanelHorario().getBtnVolver().addActionListener(this);
         this.vistaPrincipal.getPanelHorario().getBtnVolver().setActionCommand(Principal.enumAcciones.VOLVER.toString());
         
+        this.vistaPrincipal.getPanelLista().getBtnSeleccionar().addActionListener(this);
+		this.vistaPrincipal.getPanelLista().getBtnSeleccionar()
+				.setActionCommand(Principal.enumAcciones.SELECCIONAR_PROFESOR.toString());
         this.vistaPrincipal.getPanelLista().getBtnVolver().addActionListener(this);
         this.vistaPrincipal.getPanelLista().getBtnVolver().setActionCommand(Principal.enumAcciones.VOLVER.toString());     
 	}
@@ -94,6 +97,10 @@ public class Controlador implements ActionListener, MouseListener {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+			break;
+		case SELECCIONAR_PROFESOR:
+			seleccionarProfesor();
+			this.vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_HORARIO);
 			break;
 		case VOLVER:
 			this.vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_MENU);
@@ -204,7 +211,7 @@ public class Controlador implements ActionListener, MouseListener {
 		// TODO Auto-generated method stub
 
 		this.vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_LISTA);
-
+		profesores.removeAll(profesores);
 		try {
 			dos.writeInt(3);
 			dos.flush();
@@ -228,6 +235,32 @@ public class Controlador implements ActionListener, MouseListener {
 
 	}
 
+	private void seleccionarProfesor() {
+		// TODO Auto-generated method stub
+		if (!this.vistaPrincipal.getPanelLista().getListaProfesor().isSelectionEmpty()) {
+			try {
+				dos.writeInt(2);
+				dos.flush();
+				int idprofesor = 0;
+				for (Profesor profesor : profesores) {
+					if (profesor.getNombre()
+							.equals(this.vistaPrincipal.getPanelLista().getListaProfesor().getSelectedValue())) {
+						idprofesor = profesor.getId();
+					}
+				}
+				dos.writeInt(idprofesor);
+				dos.flush();
+				cargarHorario((String[][]) ois.readObject(), this.vistaPrincipal.getPanelHorario().getTablaHorario());
+
+			} catch (IOException | ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		} else {
+			JOptionPane.showMessageDialog(null, "Debes seleccionar un profesor de la lista");
+		}
+	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
