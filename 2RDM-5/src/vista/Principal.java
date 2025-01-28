@@ -31,24 +31,6 @@ public class Principal extends JFrame {
 		mCrearPanelTareas();
 	}
 
-	private void mCrearPanelTareas() {
-		// TODO Auto-generated method stub
-		panelTareas = new PanelTareas();
-		panelTareas.setLocation(0, 11);
-		panelContenedor.add(panelTareas);
-		panelContenedor.setBounds(panelTareas.getBounds());
-		panelTareas.setVisible(false);
-	}
-
-	private void mCrearPanelHorario() {
-		// TODO Auto-generated method stub
-		panelHorario = new PanelHorario();
-		panelHorario.setLocation(0, 11);
-		panelContenedor.add(panelHorario);
-		panelContenedor.setBounds(panelHorario.getBounds());
-		panelHorario.setVisible(false);
-	}
-
 	public void mVisualizarPaneles(enumAcciones panel) {
 
 		panelLogin.setVisible(false);
@@ -113,6 +95,25 @@ public class Principal extends JFrame {
         panelContenedor.setBounds(panelLista.getBounds());
         panelLista.setVisible(false);
 	}
+	
+	private void mCrearPanelTareas() {
+		// TODO Auto-generated method stub
+		panelTareas = new PanelTareas();
+		panelTareas.setLocation(0, 11);
+		panelContenedor.add(panelTareas);
+		panelContenedor.setBounds(panelTareas.getBounds());
+		panelTareas.setVisible(false);
+	}
+
+	private void mCrearPanelHorario() {
+		// TODO Auto-generated method stub
+		panelHorario = new PanelHorario();
+		panelHorario.setLocation(0, 11);
+		panelContenedor.add(panelHorario);
+		panelContenedor.setBounds(panelHorario.getBounds());
+		panelHorario.setVisible(false);
+	}
+
 
 	// *** FIN creacion de paneles ***
 
