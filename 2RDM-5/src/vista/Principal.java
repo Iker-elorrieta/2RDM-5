@@ -28,6 +28,16 @@ public class Principal extends JFrame {
 		mCrearPanelMenu();
 		mCrearPanelHorario();
 		mCrearPanelLista();
+		mCrearPanelTareas();
+	}
+
+	private void mCrearPanelTareas() {
+		// TODO Auto-generated method stub
+		panelTareas = new PanelTareas();
+		panelTareas.setLocation(0, 11);
+		panelContenedor.add(panelTareas);
+		panelContenedor.setBounds(panelTareas.getBounds());
+		panelTareas.setVisible(false);
 	}
 
 	private void mCrearPanelHorario() {
@@ -45,6 +55,7 @@ public class Principal extends JFrame {
 		panelMenu.setVisible(false);
 		panelHorario.setVisible(false);
 		panelLista.setVisible(false);
+		panelTareas.setVisible(false);
 		switch (panel) {
 		case CARGAR_PANEL_LOGIN:
 			panelLogin.setVisible(true);

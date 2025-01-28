@@ -91,8 +91,7 @@ public class Controlador implements ActionListener, MouseListener {
 		this.vistaPrincipal.getPanelTareas().getTablaHorario().getSelectionModel()
 				.addListSelectionListener(new ListSelectionListener() {
 					@Override
-					public void valueChanged(ListSelectionEvent e) {
-
+					public void valueChanged(ListSelectionEvent e) {	
 						habilitarBotones();
 					}
 				});
