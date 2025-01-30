@@ -264,14 +264,23 @@ public class Controlador implements ActionListener, MouseListener {
             dos.flush();
             dos.writeInt(id);
             dos.flush();
-            reuniones = (ArrayList<Reuniones>) ois.readObject();
             String[][] reunionesModelo = (String[][]) ois.readObject();
+            
             dos.writeInt(2);
             dos.flush();
             dos.writeInt(id);
             dos.flush();
             String[][] horario = (String[][]) ois.readObject();
+            
+            
             String[][] horarioJuntado = juntarHorarios(reunionesModelo, horario);
+            
+            dos.writeInt(15);
+			dos.flush();
+			dos.writeInt(id);
+			dos.flush();
+			reuniones = (ArrayList<Reuniones>) ois.readObject();
+			
             cargarHorario(horarioJuntado, this.vistaPrincipal.getPanelHorario().getTablaHorario());
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -279,6 +288,25 @@ public class Controlador implements ActionListener, MouseListener {
 
     }
 	
+	private void mAbrirHorario() {
+		// TODO Auto-generated method stub
+		this.vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_HORARIO);
+
+		try {
+			dos.writeInt(2);
+			dos.flush();
+			dos.writeInt(id);
+			dos.flush();
+
+			String[][] horario = (String[][]) ois.readObject();
+
+			this.vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_HORARIO);
+			cargarHorario(horario, this.vistaPrincipal.getPanelHorario().getTablaHorario());
+		} catch (IOException | ClassNotFoundException e) { // TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
 	private String[][] juntarHorarios(String[][] reunionesModelo, String[][] horario) {
         // TODO Auto-generated method stub
         int filas = horario.length;
@@ -306,25 +334,7 @@ public class Controlador implements ActionListener, MouseListener {
         return resultado;
     }
 
-	private void mAbrirHorario() {
-		// TODO Auto-generated method stub
-		this.vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_HORARIO);
 
-		try {
-			dos.writeInt(2);
-			dos.flush();
-			dos.writeInt(id);
-			dos.flush();
-
-			String[][] horario = (String[][]) ois.readObject();
-
-			this.vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_HORARIO);
-			cargarHorario(horario, this.vistaPrincipal.getPanelHorario().getTablaHorario());
-		} catch (IOException | ClassNotFoundException e) { // TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
 
 	private void cargarHorario(String[][] horario, JTable tabla) {
 
