@@ -43,6 +43,12 @@ public class HiloServidor extends Thread {
 					verOtrosHorarios(dis, oos);
 					break;
 				case 4:
+					verReuniones(dis, oos);
+					break;
+				case 5:
+					cambiarEstadoReunion(dis, oos);
+					break;
+				case 6:
 					terminar = true;
 					break;
 				default:
@@ -60,6 +66,32 @@ public class HiloServidor extends Thread {
 		}
 	}
 
+	private void verReuniones(DataInputStream dis, ObjectOutputStream oos) {
+		// TODO Auto-generated method stub
+		try {
+			int idUsuario = (int) dis.readInt();
+			ArrayList<Reuniones> reuniones = new Reuniones().getReunionesById(idUsuario);
+			String[][] reunionesModelo = new Reuniones().getModeloReuniones(reuniones);
+			
+			oos.writeObject(reunionesModelo);
+			oos.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void cambiarEstadoReunion(DataInputStream dis, ObjectOutputStream oos) {
+		// TODO Auto-generated method stub
+		try {
+			int idReunion = dis.readInt();
+			String estado = dis.readUTF();
+			new Reuniones().cambiarEstadoReunion(idReunion, estado);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	private void verOtrosHorarios(DataInputStream dis, ObjectOutputStream oos) { 
 		// TODO Auto-generated method stub
 		try {
