@@ -72,7 +72,8 @@ public class HiloServidor extends Thread {
 			int idUsuario = (int) dis.readInt();
 			ArrayList<Reuniones> reuniones = new Reuniones().getReunionesById(idUsuario);
 			String[][] reunionesModelo = new Reuniones().getModeloReuniones(reuniones);
-			
+			oos.writeObject(reuniones);
+			oos.flush();
 			oos.writeObject(reunionesModelo);
 			oos.flush();
 		} catch (IOException e) {

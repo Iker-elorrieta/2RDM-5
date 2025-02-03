@@ -264,6 +264,7 @@ public class Controlador implements ActionListener, MouseListener {
             dos.flush();
             dos.writeInt(id);
             dos.flush();
+            reuniones = (ArrayList<Reuniones>) ois.readObject();
             String[][] reunionesModelo = (String[][]) ois.readObject();
             
             dos.writeInt(2);
