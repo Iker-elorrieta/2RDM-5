@@ -260,29 +260,19 @@ public class Controlador implements ActionListener, MouseListener {
         this.vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_HORARIO);
 
         try {
-            dos.writeInt(4);
-            dos.flush();
-            dos.writeInt(id);
-            dos.flush();
-            reuniones = (ArrayList<Reuniones>) ois.readObject();
-            String[][] reunionesModelo = (String[][]) ois.readObject();
-            
-            dos.writeInt(2);
-            dos.flush();
-            dos.writeInt(id);
-            dos.flush();
-            String[][] horario = (String[][]) ois.readObject();
-            
-            
-            String[][] horarioJuntado = juntarHorarios(reunionesModelo, horario);
-            
-            dos.writeInt(15);
+        	dos.writeInt(4);
 			dos.flush();
 			dos.writeInt(id);
 			dos.flush();
 			reuniones = (ArrayList<Reuniones>) ois.readObject();
-			
-            cargarHorario(horarioJuntado, this.vistaPrincipal.getPanelHorario().getTablaHorario());
+			String[][] reunionesModelo = (String[][]) ois.readObject();
+			dos.writeInt(2);
+			dos.flush();
+			dos.writeInt(id);
+			dos.flush();
+			String[][] horario = (String[][]) ois.readObject();
+			String[][] horarioJuntado = juntarHorarios(reunionesModelo, horario);
+			cargarHorario(horarioJuntado, this.vistaPrincipal.getPanelHorario().getTablaHorario());
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
