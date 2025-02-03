@@ -258,7 +258,6 @@ public class Controlador implements ActionListener, MouseListener {
     private void mAbrirReuniones() {
         // TODO Auto-generated method stub
         this.vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_HORARIO);
-
         try {
         	dos.writeInt(4);
 			dos.flush();
@@ -273,6 +272,7 @@ public class Controlador implements ActionListener, MouseListener {
 			String[][] horario = (String[][]) ois.readObject();
 			String[][] horarioJuntado = juntarHorarios(reunionesModelo, horario);
 			cargarHorario(horarioJuntado, this.vistaPrincipal.getPanelHorario().getTablaHorario());
+			System.out.println("Fin");
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -458,6 +458,7 @@ public class Controlador implements ActionListener, MouseListener {
 			}
 
 		};
+		
 		for (Reuniones reunion : reuniones) {
 			String centroReu = "";
 			for (Centros centro : centros) {
