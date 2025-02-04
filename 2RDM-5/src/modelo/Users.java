@@ -44,8 +44,8 @@ public class Users implements java.io.Serializable {
 	}
 
 	public Users(int id, Tipos tipos, String email, String username, String password, String nombre, String apellidos,
-			String dni, String direccion, Integer telefono1, Integer telefono2, byte[] argazkia, Set matriculacioneses,
-			Set reunionesesForProfesorId, Set reunionesesForAlumnoId, Set horarioses) {
+			String dni, String direccion, Integer telefono1, Integer telefono2, byte[] argazkia, Set<Object> matriculacioneses,
+			Set<Object> reunionesesForProfesorId, Set<Object> reunionesesForAlumnoId, Set<Object> horarioses) {
 		this.id = id;
 		this.tipos = tipos;
 		this.email = email;
@@ -160,35 +160,35 @@ public class Users implements java.io.Serializable {
 		this.argazkia = argazkia;
 	}
 
-	public Set getMatriculacioneses() {
+	public Set<Object> getMatriculacioneses() {
 		return this.matriculacioneses;
 	}
 
-	public void setMatriculacioneses(Set matriculacioneses) {
+	public void setMatriculacioneses(Set<Object> matriculacioneses) {
 		this.matriculacioneses = matriculacioneses;
 	}
 
-	public Set getReunionesesForProfesorId() {
+	public Set<Object> getReunionesesForProfesorId() {
 		return this.reunionesesForProfesorId;
 	}
 
-	public void setReunionesesForProfesorId(Set reunionesesForProfesorId) {
+	public void setReunionesesForProfesorId(Set<Object> reunionesesForProfesorId) {
 		this.reunionesesForProfesorId = reunionesesForProfesorId;
 	}
 
-	public Set getReunionesesForAlumnoId() {
+	public Set<Object> getReunionesesForAlumnoId() {
 		return this.reunionesesForAlumnoId;
 	}
 
-	public void setReunionesesForAlumnoId(Set reunionesesForAlumnoId) {
+	public void setReunionesesForAlumnoId(Set<Object> reunionesesForAlumnoId) {
 		this.reunionesesForAlumnoId = reunionesesForAlumnoId;
 	}
 
-	public Set getHorarioses() {
+	public Set<Object> getHorarioses() {
 		return this.horarioses;
 	}
 
-	public void setHorarioses(Set horarioses) {
+	public void setHorarioses(Set<Object> horarioses) {
 		this.horarioses = horarioses;
 	}
 	
@@ -219,9 +219,9 @@ public class Users implements java.io.Serializable {
 	
 	public String[][] getHorarioById(int idUsuario) {
         // TODO Auto-generated method stub
-        String[][] planSemanal = { { "1ra", "", "", "", "", "", "", "" }, { "2da", "", "", "", "", "", "", "" },
-                { "3ra", "", "", "", "", "", "", "" }, { "4ta", "", "", "", "", "", "", "" },
-                { "5ta", "", "", "", "", "", "", "" } };
+		String[][] planSemanal = { { "1ra", "", "", "", "", "" }, { "2da", "", "", "", "", "" },
+				{ "3ra", "", "", "", "", "" }, { "4ta", "", "", "", "", "" }, { "5ta", "", "", "", "", "" } };
+
 
         SessionFactory sesion = HibernateUtil.getSessionFactory();
         Session session = sesion.openSession();

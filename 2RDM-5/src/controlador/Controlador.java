@@ -17,9 +17,14 @@ import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+
+import modelo.Centros;
 import modelo.Profesor;
+import modelo.Reuniones;
 import vista.Principal;
 import vista.Principal.enumAcciones;
 
@@ -32,6 +37,8 @@ public class Controlador implements ActionListener, MouseListener {
 	private ObjectInputStream ois;
 	private ObjectOutputStream oos;
 	private ArrayList<Profesor> profesores = new ArrayList<Profesor>();
+	private ArrayList<Reuniones> reuniones = new ArrayList<Reuniones>();
+	private ArrayList<Centros> centros = new ArrayList<Centros>();
 	private int id = 0;
 
 	/*
@@ -60,15 +67,50 @@ public class Controlador implements ActionListener, MouseListener {
 		this.vistaPrincipal.getPanelMenu().getLblFotoAlumno().addMouseListener(this);
 		this.vistaPrincipal.getPanelMenu().getLblFotoReuniones().addMouseListener(this);
 		this.vistaPrincipal.getPanelMenu().getLblFotoHorario().addMouseListener(this);
-		
+
 		this.vistaPrincipal.getPanelHorario().getBtnVolver().addActionListener(this);
-        this.vistaPrincipal.getPanelHorario().getBtnVolver().setActionCommand(Principal.enumAcciones.VOLVER.toString());
-        
-        this.vistaPrincipal.getPanelLista().getBtnSeleccionar().addActionListener(this);
+		this.vistaPrincipal.getPanelHorario().getBtnVolver().setActionCommand(Principal.enumAcciones.VOLVER.toString());
+
+		this.vistaPrincipal.getPanelLista().getBtnSeleccionar().addActionListener(this);
 		this.vistaPrincipal.getPanelLista().getBtnSeleccionar()
 				.setActionCommand(Principal.enumAcciones.SELECCIONAR_PROFESOR.toString());
-        this.vistaPrincipal.getPanelLista().getBtnVolver().addActionListener(this);
-        this.vistaPrincipal.getPanelLista().getBtnVolver().setActionCommand(Principal.enumAcciones.VOLVER.toString());     
+		this.vistaPrincipal.getPanelLista().getBtnVolver().addActionListener(this);
+		this.vistaPrincipal.getPanelLista().getBtnVolver().setActionCommand(Principal.enumAcciones.VOLVER.toString());
+
+		this.vistaPrincipal.getPanelTareas().getBtnConfirmar().addActionListener(this);
+		this.vistaPrincipal.getPanelTareas().getBtnConfirmar()
+				.setActionCommand(Principal.enumAcciones.CONFIRMAR_REUNION.toString());
+
+		this.vistaPrincipal.getPanelTareas().getBtnRechazar().addActionListener(this);
+		this.vistaPrincipal.getPanelTareas().getBtnRechazar()
+				.setActionCommand(Principal.enumAcciones.RECHAZAR_REUNION.toString());
+
+		this.vistaPrincipal.getPanelTareas().getBtnVolver().addActionListener(this);
+		this.vistaPrincipal.getPanelTareas().getBtnVolver().setActionCommand(Principal.enumAcciones.VOLVER.toString());
+
+		this.vistaPrincipal.getPanelTareas().getTablaHorario().getSelectionModel()
+				.addListSelectionListener(new ListSelectionListener() {
+					@Override
+					public void valueChanged(ListSelectionEvent e) {
+						habilitarBotones();
+					}
+				});
+	}
+
+	protected void habilitarBotones() {
+		// TODO Auto-generated method stub
+		if (this.vistaPrincipal.getPanelTareas().getTablaHorario().getSelectedRow() != -1) {
+			if (reuniones.get(this.vistaPrincipal.getPanelTareas().getTablaHorario().getSelectedRow()).getEstado()
+					.equalsIgnoreCase("pendiente")
+					|| reuniones.get(this.vistaPrincipal.getPanelTareas().getTablaHorario().getSelectedRow())
+							.getEstado().equalsIgnoreCase("conflicto")) {
+				this.vistaPrincipal.getPanelTareas().getBtnConfirmar().setEnabled(true);
+				this.vistaPrincipal.getPanelTareas().getBtnRechazar().setEnabled(true);
+			} else {
+				this.vistaPrincipal.getPanelTareas().getBtnConfirmar().setEnabled(false);
+				this.vistaPrincipal.getPanelTareas().getBtnRechazar().setEnabled(false);
+			}
+		}
 	}
 
 	@Override
@@ -92,19 +134,34 @@ public class Controlador implements ActionListener, MouseListener {
 			break;
 		case DESCONECTAR:
 			try {
-				dos.writeInt(4);
+				dos.writeInt(6);
 				dos.flush();
 				dis.close();
+				ois.close();
 				dos.close();
-				this.vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_LOGIN);
+				oos.close();
+				
+				cliente.close();
+				
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+			this.vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_LOGIN);
 			break;
 		case SELECCIONAR_PROFESOR:
 			seleccionarProfesor();
 			this.vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_HORARIO);
+			break;
+		case TAREAS_PENDIENTES:
+			cargarPendientes();
+			this.vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_TAREAS);
+			break;
+		case CONFIRMAR_REUNION:
+			cambiarTarea("aceptada");
+			break;
+		case RECHAZAR_REUNION:
+			cambiarTarea("denegada");
 			break;
 		case VOLVER:
 			this.vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_MENU);
@@ -115,6 +172,28 @@ public class Controlador implements ActionListener, MouseListener {
 			break;
 
 		}
+	}
+
+	private void cambiarTarea(String estado) {
+		// TODO Auto-generated method stub
+		try {
+			dos.writeInt(5);
+			dos.flush();
+			dos.writeInt(reuniones.get(this.vistaPrincipal.getPanelTareas().getTablaHorario().getSelectedRow())
+					.getIdReunion());
+			dos.flush();
+			dos.writeUTF(estado);
+			dos.flush();
+			this.vistaPrincipal.getPanelTareas().getTablaHorario().getModel().setValueAt(estado,
+					this.vistaPrincipal.getPanelTareas().getTablaHorario().getSelectedRow(), 5);
+			reuniones.get(this.vistaPrincipal.getPanelTareas().getTablaHorario().getSelectedRow()).setEstado(estado);
+			this.vistaPrincipal.getPanelTareas().getBtnConfirmar().setEnabled(false);
+			this.vistaPrincipal.getPanelTareas().getBtnRechazar().setEnabled(false);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		;
 	}
 
 	private void mConfirmarLogin(enumAcciones accion) {
@@ -134,7 +213,7 @@ public class Controlador implements ActionListener, MouseListener {
 		}
 
 		if (id != 0) {
-			//System.out.println("Hola");
+			// System.out.println("Hola");
 			this.vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_MENU);
 		} else {
 			JOptionPane.showMessageDialog(null, "No existe ningun profesor con esas credenciales");
@@ -146,7 +225,9 @@ public class Controlador implements ActionListener, MouseListener {
 		try {
 			cliente = new Socket("localhost", 4500);
 			dos = new DataOutputStream(cliente.getOutputStream());
+			oos = new ObjectOutputStream(cliente.getOutputStream());
 			dis = new DataInputStream(cliente.getInputStream());
+			ois = new ObjectInputStream(cliente.getInputStream());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -162,7 +243,10 @@ public class Controlador implements ActionListener, MouseListener {
 			mAbrirHorario();
 		} else if (source == this.vistaPrincipal.getPanelMenu().getLblFotoAlumno()) {
 			mAbrirOtrosHorario();
-		}
+		} else if (source == this.vistaPrincipal.getPanelMenu().getLblFotoReuniones()) {
+            mAbrirReuniones();
+            this.vistaPrincipal.getPanelHorario().getBtnPendientes().setVisible(true);
+        }
 
 	}
 
@@ -176,7 +260,32 @@ public class Controlador implements ActionListener, MouseListener {
 
 		this.vistaPrincipal.getPanelLista().getListaProfesor().setModel(modelo);
 	}
+	
+	@SuppressWarnings("unchecked")
+    private void mAbrirReuniones() {
+        // TODO Auto-generated method stub
+        this.vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_HORARIO);
+        try {
+        	dos.writeInt(4);
+			dos.flush();
+			dos.writeInt(id);
+			dos.flush();
+			reuniones = (ArrayList<Reuniones>) ois.readObject();
+			String[][] reunionesModelo = (String[][]) ois.readObject();
+			dos.writeInt(2);
+			dos.flush();
+			dos.writeInt(id);
+			dos.flush();
+			String[][] horario = (String[][]) ois.readObject();
+			String[][] horarioJuntado = juntarHorarios(reunionesModelo, horario);
+			cargarHorario(horarioJuntado, this.vistaPrincipal.getPanelHorario().getTablaHorario());
+			System.out.println("Fin");
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
+    }
+	
 	private void mAbrirHorario() {
 		// TODO Auto-generated method stub
 		this.vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_HORARIO);
@@ -196,72 +305,98 @@ public class Controlador implements ActionListener, MouseListener {
 		}
 
 	}
+	private String[][] juntarHorarios(String[][] reunionesModelo, String[][] horario) {
+        // TODO Auto-generated method stub
+        int filas = horario.length;
+        int columnas = horario[0].length;
 
-private void cargarHorario(String[][] horario, JTable tabla) {
-        
-        DefaultTableModel modelo = new DefaultTableModel(horario,
-                new String[] { "Hora/Día", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes" }) {
-            private static final long serialVersionUID = 1L;
+        String[][] resultado = new String[filas][columnas];
 
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false; 
-            }
-        };
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < columnas; j++) {
+                String clase = horario[i][j];
+                String reunion = reunionesModelo[i][j];
 
-        tabla.setModel(modelo);
-
-        DefaultTableCellRenderer renderizador = new DefaultTableCellRenderer() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                    boolean hasFocus, int row, int column) {
-                
-                JTextArea textArea = new JTextArea();
-                textArea.setText(value == null ? "" : value.toString());
-                textArea.setWrapStyleWord(true); 
-                textArea.setLineWrap(true); 
-                textArea.setOpaque(true); 
-                
-                if (value != null && value instanceof String) {
-                    String cellValue = (String) value;
-
-                    if (cellValue.contains("-R")) {
-                        textArea.setBackground(Color.RED);
-                        textArea.setForeground(Color.BLACK);
-                    } else if (cellValue.contains("-C")) {
-                        textArea.setBackground(Color.GREEN);
-                        textArea.setForeground(Color.BLACK);
-                    } else if (cellValue.contains("-P")) {
-                        textArea.setBackground(Color.GRAY);
-                        textArea.setForeground(Color.BLACK);
-                    } else if (cellValue.contains("-E")) {
-                        textArea.setBackground(Color.ORANGE);
-                        textArea.setForeground(Color.BLACK);
-                    } else {
-                        textArea.setBackground(table.getBackground());
-                        textArea.setForeground(table.getForeground());
-                    }
+                if (!clase.isEmpty() && !reunion.isEmpty()) {
+                    resultado[i][j] = clase + " / " + reunion;
+                } else if (!clase.isEmpty()) {
+                    resultado[i][j] = clase;
+                } else if (!reunion.isEmpty()) {
+                    resultado[i][j] = reunion;
+                } else {
+                    resultado[i][j] = "";
                 }
-
-                if (isSelected) {
-                    textArea.setBackground(table.getSelectionBackground());
-                    textArea.setForeground(table.getSelectionForeground());
-                }
-
-                return textArea;
             }
-        };
-
-        
-        for (int i = 1; i < tabla.getColumnCount(); i++) {
-            tabla.getColumnModel().getColumn(i).setCellRenderer(renderizador);
         }
 
-
-        tabla.setRowHeight(75); 
+        return resultado;
     }
+
+
+
+	private void cargarHorario(String[][] horario, JTable tabla) {
+
+		DefaultTableModel modelo = new DefaultTableModel(horario,
+				new String[] { "Hora/Día", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes" }) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+
+		tabla.setModel(modelo);
+
+		DefaultTableCellRenderer renderizador = new DefaultTableCellRenderer() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+					boolean hasFocus, int row, int column) {
+
+				JTextArea textArea = new JTextArea();
+				textArea.setText(value == null ? "" : value.toString());
+				textArea.setWrapStyleWord(true);
+				textArea.setLineWrap(true);
+				textArea.setOpaque(true);
+
+				if (value != null && value instanceof String) {
+					String cellValue = (String) value;
+
+					if (cellValue.contains("-R")) {
+						textArea.setBackground(Color.RED);
+						textArea.setForeground(Color.BLACK);
+					} else if (cellValue.contains("-C")) {
+						textArea.setBackground(Color.GREEN);
+						textArea.setForeground(Color.BLACK);
+					} else if (cellValue.contains("-P")) {
+						textArea.setBackground(Color.GRAY);
+						textArea.setForeground(Color.BLACK);
+					} else if (cellValue.contains("-E")) {
+						textArea.setBackground(Color.ORANGE);
+						textArea.setForeground(Color.BLACK);
+					} else {
+						textArea.setBackground(table.getBackground());
+						textArea.setForeground(table.getForeground());
+					}
+				}
+
+				if (isSelected) {
+					textArea.setBackground(table.getSelectionBackground());
+					textArea.setForeground(table.getSelectionForeground());
+				}
+
+				return textArea;
+			}
+		};
+
+		for (int i = 1; i < tabla.getColumnCount(); i++) {
+			tabla.getColumnModel().getColumn(i).setCellRenderer(renderizador);
+		}
+
+		tabla.setRowHeight(75);
+	}
 
 	private void mAbrirOtrosHorario() {
 		// TODO Auto-generated method stub
@@ -316,6 +451,33 @@ private void cargarHorario(String[][] horario, JTable tabla) {
 		} else {
 			JOptionPane.showMessageDialog(null, "Debes seleccionar un profesor de la lista");
 		}
+	}
+
+	private void cargarPendientes() {
+		// TODO Auto-generated method stub
+		DefaultTableModel modelo = new DefaultTableModel(
+				new String[] { "Titulo", "Asunto", "Centro", "Aula", "Fecha", "Estado" }, 0) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+
+		};
+		
+		for (Reuniones reunion : reuniones) {
+			String centroReu = "";
+			for (Centros centro : centros) {
+				if (centro.getIdCentro() == Integer.parseInt(reunion.getIdCentro())) {
+					centroReu = centro.getNombre();
+				}
+			}
+			Object[] fila = { reunion.getTitulo(), reunion.getAsunto(), centroReu, reunion.getAula(),
+					reunion.getFecha().toString(), reunion.getEstado() };
+			modelo.addRow(fila);
+		}
+		this.vistaPrincipal.getPanelTareas().getTablaHorario().setModel(modelo);
 	}
 
 	@Override
