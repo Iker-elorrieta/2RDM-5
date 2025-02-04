@@ -134,22 +134,27 @@ public class Controlador implements ActionListener, MouseListener {
 			break;
 		case DESCONECTAR:
 			try {
-				dos.writeInt(4);
+				dos.writeInt(6);
 				dos.flush();
 				dis.close();
+				ois.close();
 				dos.close();
-				this.vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_LOGIN);
+				oos.close();
+				
+				cliente.close();
+				
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+			this.vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_LOGIN);
 			break;
 		case SELECCIONAR_PROFESOR:
 			seleccionarProfesor();
 			this.vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_HORARIO);
 			break;
 		case TAREAS_PENDIENTES:
-			cargarPendiendes();
+			cargarPendientes();
 			this.vistaPrincipal.mVisualizarPaneles(enumAcciones.CARGAR_PANEL_TAREAS);
 			break;
 		case CONFIRMAR_REUNION:
@@ -220,7 +225,9 @@ public class Controlador implements ActionListener, MouseListener {
 		try {
 			cliente = new Socket("localhost", 4500);
 			dos = new DataOutputStream(cliente.getOutputStream());
+			oos = new ObjectOutputStream(cliente.getOutputStream());
 			dis = new DataInputStream(cliente.getInputStream());
+			ois = new ObjectInputStream(cliente.getInputStream());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -446,7 +453,7 @@ public class Controlador implements ActionListener, MouseListener {
 		}
 	}
 
-	private void cargarPendiendes() {
+	private void cargarPendientes() {
 		// TODO Auto-generated method stub
 		DefaultTableModel modelo = new DefaultTableModel(
 				new String[] { "Titulo", "Asunto", "Centro", "Aula", "Fecha", "Estado" }, 0) {

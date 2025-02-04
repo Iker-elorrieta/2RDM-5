@@ -16,7 +16,7 @@ public class Tipos implements java.io.Serializable {
 	private int id;
 	private String name;
 	private String nameEus;
-	private Set userses = new HashSet(0);
+	private Set<Object> userses = new HashSet<Object>(0);
 
 	public Tipos() {
 	}
@@ -25,7 +25,7 @@ public class Tipos implements java.io.Serializable {
 		this.id = id;
 	}
 
-	public Tipos(int id, String name, String nameEus, Set userses) {
+	public Tipos(int id, String name, String nameEus, Set<Object> userses) {
 		this.id = id;
 		this.name = name;
 		this.nameEus = nameEus;
@@ -56,11 +56,11 @@ public class Tipos implements java.io.Serializable {
 		this.nameEus = nameEus;
 	}
 
-	public Set getUserses() {
+	public Set<Object> getUserses() {
 		return this.userses;
 	}
 
-	public void setUserses(Set userses) {
+	public void setUserses(Set<Object> userses) {
 		this.userses = userses;
 	}
 
